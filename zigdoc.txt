@@ -1,0 +1,4 @@
+
+zig init 
+
+zig run file path
