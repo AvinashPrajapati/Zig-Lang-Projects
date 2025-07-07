@@ -2,3 +2,9 @@
 zig init 
 
 zig run file path
+
+zig test file_path
+
+-- for zig modules that contain the c code
+
+zig run file_path -lc
