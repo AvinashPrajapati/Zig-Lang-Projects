@@ -42,9 +42,51 @@ const Person = struct {
 };
 
 const std = @import("std");
+
+// Structs can be returned from functions.
+fn LinkedList(comptime T: type) type {
+    return struct {
+        pub const Node = struct {
+            prev: ?*Node,
+            next: ?*Node,
+            data: T,
+        };
+
+        first: ?*Node,
+        last: ?*Node,
+        len: usize,
+    };
+}
+
+// Level 2 :Faulty Default Field Values
+const assert = std.debug.assert;
+const print = std.debug.print;
+const Threshold = struct {
+    maximum: f32 = 0.75,
+    minimum: f32 = 0.25,
+
+    const Category = enum { low, medium, high };
+
+    fn categorize(t: Threshold, value: f32) Category {
+        assert(t.maximum >= t.minimum);
+        if (value < t.minimum) return .low;
+        if (value > t.maximum) return .high;
+        return .medium;
+    }
+};
+
 pub fn main() !void {
-    var a = Person{ .name = "avinash" };
-    a.name = "Sandeep";
-    // When you write {}, {any}, or {d} with a struct,
-    std.debug.print("{d}\n", .{a});
+    // var a = Person{ .name = "avinash" };
+    // a.name = "Sandeep";
+    // // When you write {}, {any}, or {d} with a struct,
+    // std.debug.print("{d}\n", .{a});
+
+    // Level 2: check faulty default struct value
+    var threshold: Threshold = .{
+        .maximum = 0.20, // You override the default
+        // minimum is still the default 0.25
+    };
+    _ = threshold.categorize(0.90);
+    _ = &threshold;
+    print("{d:.2}", .{threshold.maximum});
 }
